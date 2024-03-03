@@ -1,11 +1,12 @@
 # Telegrammer
 
-Telegrammer is a command-line interface (CLI) tool written in Go that allows you to send messages or documents to a specified user on Telegram. It uses the Telegram Bot API to send messages and documents.
+Telegrammer is a command-line interface (CLI) tool written in Go that allows you to send messages or documents to a specified user on Telegram, as well as retrieve your user ID for configuration by running in server mode. It uses the Telegram Bot API to send messages and documents.
 
 ## Features
 
 - Send text messages to a specified user on Telegram.
 - Send documents to a specified user on Telegram.
+- Retrieve your user ID for configuration by running in server mode.
 - Configurable through environment variables or a configuration file.
 - Provides visual feedback on successful message delivery.
 
@@ -13,15 +14,13 @@ Telegrammer is a command-line interface (CLI) tool written in Go that allows you
 
 To install Telegrammer, you need to have Go installed on your machine. Once you have Go set up, you can install Telegrammer with:
 
-```
 go get github.com/sixlive/telegrammer
-```
 
-or head over the the [releases](https://github.com/sixlive/telegrammer/releases) to download a pre-compiled binary.
+or head over to the [releases](https://github.com/sixlive/telegrammer/releases) to download a pre-compiled binary.
 
 ## Usage
 
-To use Telegrammer, you need to have a Telegram bot token and the user ID of the recipient. You can set these through environment variables or in a YAML configuration file.
+To use Telegrammer, you need to have a Telegram bot token and the user ID of the recipient. You can set these through environment variables or in a YAML configuration file. Additionally, you can run Telegrammer in server mode to listen for new messages and find your user ID for configuration.
 
 ### Environment Variables
 
@@ -32,10 +31,7 @@ To use Telegrammer, you need to have a Telegram bot token and the user ID of the
 
 You can also provide a configuration file in YAML format. The file should have the following structure:
 
-```yaml
-bot_key: your_bot_token
-user_id: recipient_user_id
-```
+yaml bot_key: your_bot_token user_id: recipient_user_id
 
 You can place the configuration file in the following locations:
 
@@ -45,20 +41,21 @@ You can place the configuration file in the following locations:
 ### Command-Line Flags
 
 - `-f, --file` - Path to the file you want to send.
+- `--server` - Run in server mode to listen for new messages and find your user ID.
 
 ### Examples
 
 Send a text message:
 
-```
-telegrammer "Hello, world!"
-```
+`telegrammer "Hello, world!"`
 
 Send a document:
 
-```
-telegrammer -f /path/to/document.pdf "Here's the document you requested."
-```
+`telegrammer -f /path/to/document.pdf "Here's the document you requested."`
+
+Find your user ID by running in server mode:
+
+`telegrammer --server`
 
 ## Contributing
 
@@ -67,4 +64,3 @@ Contributions to Telegrammer are welcome! Please submit a pull request or create
 ## License
 
 Telegrammer is licensed under the MIT License. See [LICENSE](LICENSE) for more information.
-
