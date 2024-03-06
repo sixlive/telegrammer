@@ -1,5 +1,7 @@
 # Telegrammer
 
+![telegrammer demo](./docs/demo.gif)
+
 Telegrammer is a command-line interface (CLI) tool written in Go that allows you to send messages or documents to a specified user on Telegram, as well as retrieve your user ID for configuration by running in server mode. It uses the Telegram Bot API to send messages and documents.
 
 ## Features
