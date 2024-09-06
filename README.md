@@ -14,11 +14,13 @@ Telegrammer is a command-line interface (CLI) tool written in Go that allows you
 
 ## Installation
 
-To install Telegrammer, you need to have Go installed on your machine. Once you have Go set up, you can install Telegrammer with:
+You can download Telegrammer from the [releases](https://github.com/sixlive/telegrammer/releases) page.
 
-go get github.com/sixlive/telegrammer
+Or install with `go`:
 
-or head over to the [releases](https://github.com/sixlive/telegrammer/releases) to download a pre-compiled binary.
+```
+go install github.com/sixlive/telegrammer
+```
 
 ## Usage
 
