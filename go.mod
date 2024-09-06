@@ -1,4 +1,4 @@
-module telegrammer
+module github.com/sixlive/telegrammer
 
 go 1.21.4
 
