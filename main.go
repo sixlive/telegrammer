@@ -57,8 +57,15 @@ func main() {
 		runServerMode(config)
 		return
 	}
+	messageText := ""
 
-	messageText := pflag.Arg(0) // Get the first non-flag command-line argument.
+	// Get text from stdin and start messageText with it
+	stdin, err := readStdin()
+	if stdin != "" && err == nil {
+		messageText += stdin + "\n"
+	}
+	
+	messageText += pflag.Arg(0) // Get the first non-flag command-line argument.
 
 	bot, err := tgbotapi.NewBotAPI(config.BotKey)
 	if err != nil {
@@ -157,4 +164,12 @@ func sendTextMessage(bot *tgbotapi.BotAPI, userID int64, messageText string) err
 func notifySuccess() {
 	style := lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	fmt.Println(style.Render("Message sent!"))
+}
+
+func readStdin() (string, error) {
+	stdin, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return "", err
+	}
+	return string(stdin), nil
 }
