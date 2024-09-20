@@ -19,7 +19,7 @@ You can download Telegrammer from the [releases](https://github.com/sixlive/tele
 Or install with `go`:
 
 ```
-go install github.com/sixlive/telegrammer
+go install github.com/sixlive/telegrammer@latest
 ```
 
 ## Usage
@@ -35,7 +35,10 @@ To use Telegrammer, you need to have a Telegram bot token and the user ID of the
 
 You can also provide a configuration file in YAML format. The file should have the following structure:
 
-yaml bot_key: your_bot_token user_id: recipient_user_id
+```yaml
+bot_key: your_bot_token
+user_id: recipient_user_id
+```
 
 You can place the configuration file in the following locations:
 
