@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -57,14 +58,15 @@ func main() {
 		runServerMode(config)
 		return
 	}
+
 	messageText := ""
 
 	// Get text from stdin and start messageText with it
 	stdin, err := readStdin()
 	if stdin != "" && err == nil {
-		messageText += stdin + "\n"
+		messageText += stdin
 	}
-	
+
 	messageText += pflag.Arg(0) // Get the first non-flag command-line argument.
 
 	bot, err := tgbotapi.NewBotAPI(config.BotKey)
@@ -105,7 +107,7 @@ func runServerMode(config *AppConfig) {
 	for update := range updates {
 		if update.Message != nil {
 			displayDebugData(update)
-            os.Exit(0)
+			os.Exit(0)
 		}
 	}
 }
