@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"log"
 	"os"
@@ -58,7 +59,15 @@ func main() {
 		return
 	}
 
-	messageText := pflag.Arg(0) // Get the first non-flag command-line argument.
+	messageText := ""
+
+	// Get text from stdin and start messageText with it
+	stdin, err := readStdin()
+	if stdin != "" && err == nil {
+		messageText += stdin
+	}
+
+	messageText += pflag.Arg(0) // Get the first non-flag command-line argument.
 
 	bot, err := tgbotapi.NewBotAPI(config.BotKey)
 	if err != nil {
@@ -98,7 +107,7 @@ func runServerMode(config *AppConfig) {
 	for update := range updates {
 		if update.Message != nil {
 			displayDebugData(update)
-            os.Exit(0)
+			os.Exit(0)
 		}
 	}
 }
@@ -157,4 +166,12 @@ func sendTextMessage(bot *tgbotapi.BotAPI, userID int64, messageText string) err
 func notifySuccess() {
 	style := lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 	fmt.Println(style.Render("Message sent!"))
+}
+
+func readStdin() (string, error) {
+	stdin, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		return "", err
+	}
+	return string(stdin), nil
 }
