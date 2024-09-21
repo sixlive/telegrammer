@@ -64,6 +64,14 @@ Find your user ID by running in server mode:
 
 `telegrammer --server`
 
+Send a request via STDIN:
+
+`echo "foo" | telegrammer`
+
+or with both:
+
+`echo "foo" | telegrammer "bar"`
+
 ## Contributing
 
 Contributions to Telegrammer are welcome! Please submit a pull request or create an issue if you have any features you'd like to add or bugs you've found.
