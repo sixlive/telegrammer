@@ -169,9 +169,15 @@ func notifySuccess() {
 }
 
 func readStdin() (string, error) {
-	stdin, err := io.ReadAll(os.Stdin)
-	if err != nil {
-		return "", err
+	stat, _ := os.Stdin.Stat()
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		// Data is being piped to stdin
+		stdin, err := io.ReadAll(os.Stdin)
+		if err != nil {
+			return "", err
+		}
+		return string(stdin), nil
 	}
-	return string(stdin), nil
+	// No data piped, return empty string
+	return "", nil
 }
