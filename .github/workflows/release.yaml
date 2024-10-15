@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 name: Release
 
@@ -12,55 +12,59 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - goos: linux
             arch: amd64
-          - os: ubuntu-latest
+          - goos: linux
             arch: arm64
-          - os: macos-latest
+          - goos: linux
+            arch: arm
+            arm: 7
+          - goos: darwin
             arch: amd64
-          - os: macos-latest
+          - goos: darwin
             arch: arm64
     runs-on: ${{ matrix.os }}
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
 
-    - name: Set up Go 1.20
-      uses: actions/setup-go@v4
-      with:
+      - name: Set up Go 1.20
+        uses: actions/setup-go@v4
+        with:
           go-version-file: go.mod
           check-latest: true
           cache: false
 
-    - name: Restore Go modules cache
-      uses: actions/cache@v3
-      with:
-        path: ~/go/pkg/mod
-        key: go-${{ matrix.os }}-${{ matrix.arch }}-${{ hashFiles('go.mod') }}
-        restore-keys: |
-          go-${{ matrix.os }}-${{ matrix.arch }}-
+      - name: Restore Go modules cache
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: go-${{ matrix.os }}-${{ matrix.arch }}-${{ hashFiles('go.mod') }}
+          restore-keys: |
+            go-${{ matrix.os }}-${{ matrix.arch }}-
 
-    - name: Download dependencies
-      run: go mod download
+      - name: Download dependencies
+        run: go mod download
 
-    - name: Build
-      run: GOARCH=${{ matrix.arch }} go build -v
+      - name: Build
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.arch }}
+          GOARM: ${{ matrix.arm }}
+        run: go build -v
 
-    # - name: Build Check
-    #   run: ./telegrammer --version
+      - name: Set version
+        id: version
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
 
-    - name: Set version
-      id: version
-      run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+      - name: Package release
+        run: tar -zcvf telegrammer-${{ matrix.goos }}-${{ matrix.arch }}.tar.gz telegrammer
 
-    - name: Package release
-      run: tar -zcvf telegrammer-${{ matrix.arch }}.tar.gz telegrammer
-
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        file: telegrammer-${{ matrix.arch }}.tar.gz
-        asset_name: telegrammer-${{ steps.version.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
-        tag: ${{ steps.version.outputs.tag }}
-        overwrite: true
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: telegrammer-${{ matrix.arch }}.tar.gz
+          asset_name: telegrammer-${{ steps.version.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+          tag: ${{ steps.version.outputs.tag }}
+          overwrite: true
