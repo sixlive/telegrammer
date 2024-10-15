@@ -40,9 +40,9 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/go/pkg/mod
-          key: go-${{ matrix.os }}-${{ matrix.arch }}-${{ hashFiles('go.mod') }}
+          key: go-${{ matrix.goos }}-${{ matrix.arch }}-${{ hashFiles('go.mod') }}
           restore-keys: |
-            go-${{ matrix.os }}-${{ matrix.arch }}-
+            go-${{ matrix.goos }}-${{ matrix.arch }}-
 
       - name: Download dependencies
         run: go mod download
@@ -65,6 +65,6 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: telegrammer-${{ matrix.arch }}.tar.gz
-          asset_name: telegrammer-${{ steps.version.outputs.tag }}-${{ matrix.os }}-${{ matrix.arch }}.tar.gz
+          asset_name: telegrammer-${{ steps.version.outputs.tag }}-${{ matrix.goos }}-${{ matrix.arch }}.tar.gz
           tag: ${{ steps.version.outputs.tag }}
           overwrite: true
